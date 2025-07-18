@@ -12,13 +12,6 @@ app.use(express.json());
 const loginRouter = require('./routes/Login');
 app.use('/api', loginRouter);
 
-const portafoliosRouter = require('./routes/portafolios');
-app.use('/api', portafoliosRouter);
-
-
-const clientesRouter = require('./routes/clientes');
-app.use('/api', clientesRouter);
-
 const consultaDocumentosRouter = require('./routes/consultadocumentos');
 app.use('/api', consultaDocumentosRouter);
 

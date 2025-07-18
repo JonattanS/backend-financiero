@@ -30,6 +30,10 @@ router.post('/login', async (req, res) => {
     const { rows: ciaRows } = await pool.query('SELECT ciaraz FROM adm_cia WHERE id = $1', [user.adm_ciaid]);
     const ciaraz = ciaRows.length > 0 ? ciaRows[0].ciaraz : null;
 
+    // Consulta los portafolios habilitados para esta cia
+    const { rows: portafolioRows } = await pool.query('SELECT porcod FROM nov_por WHERE adm_ciaid = $1',[user.adm_ciaid]);
+    const portafolios = portafolioRows.map(row => row.porcod);
+
     // Consulta el rol del usuario
     const rolResult = await pool.query('SELECT rolcod, roldes FROM adm_rol WHERE id = $1', [user.adm_rolid]);
     const rol = rolResult.rows[0] || { rolcod: null, roldes: null };
@@ -63,7 +67,8 @@ router.post('/login', async (req, res) => {
         ciaraz,
         adm_rolid: user.adm_rolid,
         rolcod: rol.rolcod,
-        roldes: rol.roldes
+        roldes: rol.roldes,
+        portafolios // <- array de porcod habilitados
       }
     });
   } catch (error) {
